@@ -30,6 +30,9 @@ patient_data <- data.table(patient_data[-1,])
 subs_names <- c("Patient", "Malady", "Hospital", "NGOs_Nonprofits", "Doctor(s)")
 patient_data_use <- patient_data[,.(Patient, Malady, Hospital, NGOs_Nonprofits)]
 
+write.csv(patient_data_use, paste0(path, "/clean_data/patient_data_use.csv"), row.names=F)
+
+
 ### Information that can be directly used ###
 Country_of_origin
 Government_Documentation
@@ -61,6 +64,8 @@ patient_malady <- patient_malady %>%
   bind_tf_idf(malady, Patient, n) %>%
   arrange(desc(tf_idf))
 
+
+
 ### Hospital ##
 patient_hospital <- patient_data_use %>%
   unnest_tokens(hospital, Hospital) %>%
@@ -87,7 +92,9 @@ Burn_data_use <- Burn_data_use[!is.na(Burn_data_use$organization_name),]
 Burn_data_use <- Burn_data_use[!is.na(Burn_data_use$Description),]
 Burn_data_use <- Burn_data_use[!Burn_data_use$organization_name %in% c("Hospital Name:", "Organization Name :", "Organization Name:", "Organization Name: "), ]
 Burn_data_use <- Burn_data_use[!Burn_data_use$Description %in% c("Description", "Desciption:"), ]
-Burn_data_use$type <- "Bure_care"
+Burn_data_use$type <- "Burn_care"
+
+write.csv(Burn_data_use, paste0(path, "/clean_data/Burn_care.csv"), row.names=F)
 
 ### Apply tf-idf on organization data ###
 org_description <- Burn_data_use %>%
